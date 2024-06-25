@@ -1,0 +1,69 @@
+---
+title: "Remote MDX"
+date: "2024-06-25"
+---
+
+If your markdown or MDX files or content lives somewhere else, you can fetch it dynamically on the server. This is useful for content stored in a separate local folder, CMS, database, or anywhere else. A popular community package for this use is next-mdx-remote.
+
+Good to know: Please proceed with caution. MDX compiles to JavaScript and is executed on the server. You should only fetch MDX content from a trusted source, otherwise this can lead to remote code execution (RCE).
+
+The following example uses next-mdx-remote:
+
+app/my-mdx-page-remote/page.tsx
+TypeScript
+
+TypeScript
+
+import { MDXRemote } from 'next-mdx-remote/rsc'
+ 
+export default async function RemoteMdxPage() {
+  // MDX text - can be from a local file, database, CMS, fetch, anywhere...
+  const res = await fetch('https://...')
+  const markdown = await res.text()
+  return <MDXRemote source={markdown} />
+}
+Navigating to the /my-mdx-page-remote route should display your rendered MDX.
+
+Layouts
+To share a layout across MDX pages, you can use the built-in layouts support with the App Router.
+
+app/my-mdx-page/layout.tsx
+TypeScript
+
+TypeScript
+
+export default function MdxLayout({ children }: { children: React.ReactNode }) {
+  // Create any shared layout or styles here
+  return <div style={{ color: 'blue' }}>{children}</div>
+}
+Remark and Rehype Plugins
+You can optionally provide remark and rehype plugins to transform the MDX content.
+
+For example, you can use remark-gfm to support GitHub Flavored Markdown.
+
+Since the remark and rehype ecosystem is ESM only, you'll need to use next.config.mjs as the configuration file.
+
+next.config.mjs
+
+import remarkGfm from 'remark-gfm'
+import createMDX from '@next/mdx'
+ 
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Configure `pageExtensions`` to include MDX files
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  // Optionally, add any other Next.js config below
+}
+ 
+const withMDX = createMDX({
+  // Add markdown plugins here, as desired
+  options: {
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [],
+  },
+})
+ 
+// Wrap MDX and Next.js config with each other
+export default withMDX(nextConfig
+
+)
