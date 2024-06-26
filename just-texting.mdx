@@ -14,7 +14,7 @@ TypeScript
 
 TypeScript
 
-```jsx
+```ts
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 export default async function RemoteMdxPage() {
@@ -31,9 +31,6 @@ Layouts
 To share a layout across MDX pages, you can use the built-in layouts support with the App Router.
 
 app/my-mdx-page/layout.tsx
-TypeScript
-
-TypeScript
 
 ```ts
 export default function MdxLayout({ children }: { children: React.ReactNode }) {
@@ -51,10 +48,9 @@ Since the remark and rehype ecosystem is ESM only, you'll need to use next.confi
 
 next.config.mjs
 
-```ts
-import remarkGfm from "remark-gfm";
-import createMDX from "@next/mdx";
+<Video id="6h649f567df" />
 
+```ts
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Configure `pageExtensions`` to include MDX files
